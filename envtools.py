@@ -1,6 +1,20 @@
-class s:
+class S:
     # 특정 객체의 정보를 표현하기 위한 도구
-    pass
+    def __init__(self, o):
+        self.o = o
+        self.name = o.__name__
+        self.type_ = type(o)
+
+        try:
+            self.length = len(o)
+        except TypeError:
+            self.length = None
+
+    def __repr__(self):
+        return f'''Type:{self.type_}
+                
+                '''
+
 
 
 class Tracer:
