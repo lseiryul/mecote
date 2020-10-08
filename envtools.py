@@ -2,7 +2,7 @@ class S:
     # 특정 객체의 정보를 표현하기 위한 도구
     def __init__(self, o):
         self.o = o
-        self.name = o.__name__
+        # self.name = o.__name__
         self.type_ = type(o)
 
         try:
@@ -10,16 +10,42 @@ class S:
         except TypeError:
             self.length = None
 
-    def __repr__(self):
-        return f'''Type:{self.type_}
-                
-                '''
+        self.dir_dict = {x: eval(f'o.{x}', None, {'o': o}) for x in dir(o)}
+        '''
+        def print_dirs(o, max_len=100, suppress_under=True, suppress_dunder=True):
+            for x in dir(o):
+                if not (suppress_under and x.startswith('_') or False):
+                    if not (suppress_dunder and x.startswith('__') or False):
+                        t = str(eval(f'o.{x}'))
+                        print(x, ':', t[:max_len])
+        print_dirs(sys)
+        print()
+        # print(type(sys.implementation), sys.implementation)
+        # print([x for x in dir(sys.implementation) if not x.startswith('_')])
+        print_dirs(sys.implementation, suppress_under=False)
+        '''
 
+    def __call__(self, *args, **kwargs):
+        pass
+
+    def __repr__(self):
+        return f'''Type:{self.type_}'''
+
+
+def stat(o):
+    pass
 
 
 class Tracer:
     # 디버거/로거와 비슷한 역할. 단계나 조건에 따라 정보를 수집하며, 예외 발생을 통한 탈출을 지원한다.
-    pass
+    def __init__(self, cond=(lambda c: c>100)):
+
+        self.cond = cond
+
+        self.stack = []
+
+    def __call__(self, *args, **kwargs):
+        self.stack.append((args, kwargs))
 
 
 class Problem:
@@ -35,7 +61,7 @@ class Refactogenerator:
 
 class View:
     # 특정 자료 형태의 시각화를 수행하고 디스플레이 할 수 있도록 만들 예정.
-    NotImplemented
+    pass
 
 
 # 그리고 실행 시간 출력해주거나 하는 녀석도 추가해야.
